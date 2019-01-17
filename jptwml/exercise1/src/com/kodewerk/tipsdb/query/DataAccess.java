@@ -98,9 +98,9 @@ public class DataAccess {
         try {
             PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO tips(keyword,tip) VALUES(?,?)");
-            for (int i = 0; i < Keyword.AllKeywordsList.size(); i++) {
-                String keyword = (String) Keyword.AllKeywordsList.get(i);
-                Set tipList = Keyword.AllKeywords.get(keyword).keySet();
+            for (int i = 0; i < Keyword.allKeywordsList.size(); i++) {
+                String keyword = (String) Keyword.allKeywordsList.get(i);
+                Set tipList = Keyword.allKeywords.get(keyword).keySet();
                 for (int j = 0; j < tipList.size(); j++) {
                     String tip = tipList.get(j).getTip();
                     ps.setString(1, keyword);

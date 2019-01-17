@@ -2,29 +2,31 @@ package com.kodewerk.tipsdb.domain;
 
 import com.kodewerk.tipsdb.TipsDBProperties;
 
-import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
 public class TipsDocuments {
     //A TipDocument is the document from which tips were extracted
 
+    private Keyword keyword;
     private ArrayList tipsDocuments;
 
-    public TipsDocuments() {
+    public TipsDocuments(Keyword keyword) {
+        this.keyword = keyword;
     }
 
     public ArrayList getTipsDocuments() throws IOException {
-        if ( tipsDocuments == null) {
+        if (tipsDocuments == null) {
             this.loadTipsDocuments();
         }
         return this.tipsDocuments;
     }
 
     private void loadTipsDocuments() throws IOException {
-            this.loadTipsDocument(TipsDBProperties.getTipsDocumentFile());
+        this.loadTipsDocument(TipsDBProperties.getTipsDocumentFile());
     }
 
     private void loadTipsDocument(String filename) throws IOException {
@@ -39,20 +41,20 @@ public class TipsDocuments {
             int numtiplines = Integer.parseInt(rdr.readLine());
 //            doc.setTips(new Tip[numtiplines]);
             for (int i = 0; i < numtiplines; i++) {
-                doc.setTipAt(i, new Tip(rdr.readLine()));
+                doc.setTipAt(i, new Tip(rdr.readLine(), keyword));
             }
         }
         String s;
         if ((s = rdr.readLine()) != null)
             throw new IOException("Expected end of file but got: " + s);
-        Keyword.completeInit();
+        keyword.completeInit();
         //TipsDocuments.AllTipDocuments = new TipsDocuments[alldocs.size()];
         //for (int i = 0; i < alldocs.size(); i++)
         //    TipsDocuments.AllTipDocuments[i] = (TipsDocuments) alldocs.get(i);
         //TipsDocuments.Initialized = true;
     }
 
-    public Stream<TipDocument> stream() throws IOException{
+    public Stream<TipDocument> stream() throws IOException {
         return getTipsDocuments().stream();
     }
 

@@ -1,5 +1,6 @@
 package com.kodewerk.tipsdb.servlet;
 
+import com.kodewerk.tipsdb.domain.Keyword;
 import com.kodewerk.tipsdb.query.Result;
 
 import javax.servlet.ServletException;
@@ -11,9 +12,10 @@ import java.io.PrintWriter;
 
 public abstract class SimpleQuery extends HttpServlet {
 
+
     abstract String queryType();
 
-    abstract void doValidQuery(String parameterkeywords, PrintWriter out,
+    abstract void doValidQuery(Keyword keyword,String parameterkeywords, PrintWriter out,
                                HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException;
 
     public String defaultInfo() {
@@ -24,6 +26,7 @@ public abstract class SimpleQuery extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
+        Keyword keyword=new Keyword();
         if (!request.getRequestURI().startsWith("/tips/" + queryType().toLowerCase())) {
             //Some invalid request
             Result res = new Result("", new String[0], defaultInfo());
@@ -40,7 +43,7 @@ public abstract class SimpleQuery extends HttpServlet {
                 out.println(doc);
             } else {
                 //A valid query
-                doValidQuery(param.substring(queryType().length() + 1), out, request, response);
+                doValidQuery(keyword,param.substring(queryType().length() + 1), out, request, response);
             }
         }
         this.release();
@@ -58,4 +61,6 @@ public abstract class SimpleQuery extends HttpServlet {
     }
 	
     public void release() {}
+
+
 }

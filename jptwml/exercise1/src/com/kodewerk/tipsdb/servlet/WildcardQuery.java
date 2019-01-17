@@ -1,5 +1,6 @@
 package com.kodewerk.tipsdb.servlet;
 
+import com.kodewerk.tipsdb.domain.Keyword;
 import com.kodewerk.tipsdb.domain.TipDocument;
 import com.kodewerk.tipsdb.domain.Tip;
 import com.kodewerk.tipsdb.domain.TipsDocuments;
@@ -23,9 +24,9 @@ public class WildcardQuery extends SimpleQuery {
         return "wildcard";
     }
 
-    public void doValidQuery(String parameterkeywords, PrintWriter out, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void doValidQuery(Keyword keyword, String parameterkeywords, PrintWriter out, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
-        TipsDocuments documents = new TipsDocuments();
+        TipsDocuments documents = new TipsDocuments(keyword);
         String keywords = parameterkeywords.replaceAll("\\%..", " "); //get rid of all HTML mappings
         keywords = keywords.replaceAll("\\W+", " "); //get rid of all non-word chars
         String[] keywordArray = keywords.split(" ");

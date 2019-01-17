@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Key;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class KeywordQuery extends SimpleQuery {
             }
     }
 
-    public void doValidQuery(String parameterkeywords, PrintWriter out,
+    public void doValidQuery(Keyword keyword,String parameterkeywords, PrintWriter out,
                              HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String keywords = parameterkeywords.replaceAll("\\%..", " "); //get rid of all HTML mappings
         keywords = keywords.replaceAll("\\W+", " "); //get rid of all non-word chars
@@ -39,12 +40,13 @@ public class KeywordQuery extends SimpleQuery {
         ArrayList relevantKeywords = new ArrayList();
         ArrayList nonPriorityKeywords = new ArrayList();
         String defaultInfo = defaultInfo();
+
         for (int i = 0; i < keywordArray.length; i++) {
-            if (Keyword.IgnoreWords.get(keywordArray[i].toUpperCase()) != null) {
+            if (keyword.IgnoreWords.get(keywordArray[i].toUpperCase()) != null) {
                 defaultInfo += "<em>";
                 defaultInfo += keywordArray[i];
                 defaultInfo += " ignored;</em>";
-            } else if ( Keyword.PrioritizeWords.containsKey( keywordArray[ i].toUpperCase()))
+            } else if ( keyword.PrioritizeWords.containsKey( keywordArray[ i].toUpperCase()))
                 relevantKeywords.add( keywordArray[ i].toUpperCase());
             else
                 nonPriorityKeywords.add( keywordArray[ i].toUpperCase());

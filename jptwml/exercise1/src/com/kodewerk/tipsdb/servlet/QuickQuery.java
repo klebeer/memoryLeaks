@@ -1,5 +1,6 @@
 package com.kodewerk.tipsdb.servlet;
 
+import com.kodewerk.tipsdb.domain.Keyword;
 import com.kodewerk.tipsdb.domain.Tip;
 import com.kodewerk.tipsdb.domain.TipsDocuments;
 import com.kodewerk.tipsdb.query.Result;
@@ -17,19 +18,21 @@ import java.util.stream.Stream;
 
 public class QuickQuery extends SimpleQuery {
 
-    TipsDocuments documents = new TipsDocuments();
+    TipsDocuments documents;
+
 
     public void init() {
+
     }
 
     public String queryType() {
         return "Quick";
     }
 
-    public void doValidQuery(String parameterkeywords, PrintWriter out,
+    public void doValidQuery(Keyword keyword,String parameterkeywords, PrintWriter out,
                              HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-
+        documents= new TipsDocuments(keyword);
         String keywords = parameterkeywords.replaceAll("\\%..", " "); //get rid of all HTML mappings
         keywords = keywords.replaceAll("\\W+", " "); //get rid of all non-word chars
         List<String> keywordArray = Stream.of(keywords.split(" ")).parallel().collect(Collectors.toList());

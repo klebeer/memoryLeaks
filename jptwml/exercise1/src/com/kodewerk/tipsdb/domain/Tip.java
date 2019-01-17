@@ -1,14 +1,14 @@
 package com.kodewerk.tipsdb.domain;
 
-import java.util.ArrayList;
-
 public class Tip {
     //A tip is one line of text, 10 keywords, a ref to the TipDocument
     String line;
 
-    public Tip(String s) {
+
+
+    public Tip(String s,Keyword keyword) {
         line = s;
-        Keyword.extractKeywordsFrom(this, s);
+        keyword.extractKeywordsFrom(this, s);
     }
 
     public String getTip() {

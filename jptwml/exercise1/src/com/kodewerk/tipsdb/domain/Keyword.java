@@ -1,30 +1,30 @@
 package com.kodewerk.tipsdb.domain;
 
-import java.util.Collections;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Keyword {
-    static Pattern WordPattern = Pattern.compile("\\w+");
-    public static final ConcurrentHashMap<String, ConcurrentHashMap> AllKeywords = new ConcurrentHashMap<String, ConcurrentHashMap>();
-    public static final ArrayList AllKeywordsList = new ArrayList();
-    public static final HashMap AllKeywordsBackList = new HashMap();
-    static volatile int AllKeywordsCount = 0;
 
-    public static void completeInit() {
-        for (int i = 0; i < AllKeywordsList.size(); i++)
-            AllKeywordsBackList.put(AllKeywordsList.get(i), new Integer(i));
+    private final ConcurrentHashMap<String, ConcurrentHashMap> allKeywords = new ConcurrentHashMap<String, ConcurrentHashMap>();
+    private final ArrayList allKeywordsList = new ArrayList();
+    private final HashMap allKeywordsBackList = new HashMap();
+    Pattern WordPattern = Pattern.compile("\\w+");
+    private volatile int allKeywordsCount = 0;
+
+    public  void completeInit() {
+        for (int i = 0; i < allKeywordsList.size(); i++) {
+            allKeywordsBackList.put(allKeywordsList.get(i), new Integer(i));
+        }
     }
 
-    static int MaxKSize = 0;
+     int MaxKSize = 0;
 
-    public static Keyword[] extractKeywordsFrom(Tip tip, String s) {
+    public  Keyword[] extractKeywordsFrom(Tip tip, String s) {
 //    if (s.length() > MaxKSize)
 //      System.out.println(MaxKSize = s.length());
         Matcher matcher = WordPattern.matcher(s);
@@ -51,17 +51,17 @@ public class Keyword {
                 // Only interested if we haven't found this already in this tip
                 if (keywords.get(upword) == null) {
                     keywords.put(upword, Boolean.TRUE);
-                    //List arr = AllKeywords.get(upword);
-                    ConcurrentHashMap arr = AllKeywords.get(upword);
+                    //List arr = allKeywords.get(upword);
+                    ConcurrentHashMap arr = allKeywords.get(upword);
                     if (arr == null) {
                         //arr = Collections.synchronizedList(new ArrayList());
                         arr = new ConcurrentHashMap<String, ConcurrentHashMap>();
-                        AllKeywordsList.add(upword);
+                        allKeywordsList.add(upword);
                     }
                     //arr.add(tip);
                     arr.put(tip, tip);
-                    AllKeywords.put(upword, arr);
-                    AllKeywordsCount++;
+                    allKeywords.put(upword, arr);
+                    allKeywordsCount++;
                 }
             }
         }
@@ -74,11 +74,11 @@ public class Keyword {
         return null;
     }
 
-    public static void printAllWords() {
+    public  void printAllWords() {
 /*
-    System.out.println(AllKeywordsCount);
+    System.out.println(allKeywordsCount);
     System.out.println();
-    Iterator iterator = AllKeywords.entrySet().iterator();
+    Iterator iterator = allKeywords.entrySet().iterator();
     while(iterator.hasNext())
     {
       Map.Entry e = (Map.Entry) iterator.next();
@@ -99,7 +99,7 @@ public class Keyword {
 */
     }
 
-    public static void addToAllWords(String word) {
+    public  void addToAllWords(String word) {
         String upword = word.toUpperCase();
         if ((IgnoreWords.get(upword) == null) && (PrioritizeWords.get(upword) == null)) {
             Integer i = (Integer) AllWords.get(upword);
@@ -111,11 +111,11 @@ public class Keyword {
         }
     }
 
-    static Map AllWords = new HashMap();
-    public static final HashMap IgnoreWords = new HashMap();
-    public static final HashMap PrioritizeWords = new HashMap();
+     Map AllWords = new HashMap();
+    public  final HashMap IgnoreWords = new HashMap();
+    public  final HashMap PrioritizeWords = new HashMap();
 
-    public static void init() {
+    public  void init() {
         for (int i = 0; i < PrioritizeTheseWords.length; i += 2) {
             PrioritizeWords.put(PrioritizeTheseWords[i].toUpperCase(), PrioritizeTheseWords[i + 1].toUpperCase());
         }
@@ -127,7 +127,7 @@ public class Keyword {
         }
     }
 
-    static String[] PrioritizeTheseWords = {
+     String[] PrioritizeTheseWords = {
         "THREADS", "THREAD",
         "THREAD", "THREAD",
         "BEANS", "BEAN",
@@ -471,7 +471,7 @@ public class Keyword {
         "REFLECTING", "REFLECTION",
     };
 
-    static String[] IgnoreTheseWords = {
+     String[] IgnoreTheseWords = {
         "from", "to", "and", "your", "than", "is", "java", "will", "it", "on",
         "have", "all", "by", "performance", "a", "may", "in", "can", "i", "or",
         "article", "at", "where", "using", "as", "rather", "one", "this", "so",
@@ -512,7 +512,7 @@ public class Keyword {
     "", "", "", "", "", "", "", "", "", "", "", */
     };
 
-    static {
+     {
         init();
     }
 

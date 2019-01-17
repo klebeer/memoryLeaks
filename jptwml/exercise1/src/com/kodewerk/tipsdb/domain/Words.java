@@ -77,7 +77,7 @@ public class Words {
 /*
     System.out.println(AllKeywordsCount);
     System.out.println();
-    Iterator iterator = AllKeywords.entrySet().iterator();
+    Iterator iterator = allKeywords.entrySet().iterator();
     while(iterator.hasNext())
     {
       Map.Entry e = (Map.Entry) iterator.next();
